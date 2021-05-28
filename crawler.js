@@ -1,9 +1,10 @@
 const request = require('request')
 const cheerio = require('cheerio')
 const URL = require('url-parse')
-const e = require('express')
+const  mailer = require('./mailer.js')
+require('dotenv').config()
 
-const SEARCH = 'Pricing Error'
+const SEARCH = 'price error'
 const BASE = 'https://www.ozbargain.com.au/'
 const START_URL = 'https://www.ozbargain.com.au/deals'
 const url = new URL(START_URL)
@@ -11,7 +12,7 @@ var pagesToVisit = []
 var pagesVisited = []
 
 const crawler = () => {
-  //Initial Link collection
+  //Initial link collection
   request(START_URL, (error, res, body) => {
     console.log(`Visiting ${START_URL} to gather links...`)
     if (error) {
@@ -74,7 +75,11 @@ const visitPage = (url, callback) => {
       var $ = cheerio.load(body)
       var isWordFound = searchForWord($, SEARCH)
       if (isWordFound) {
+        var s = `oz-crawler found at ${url}`
+        var b = `Pricing error found. Follow the link at ${url}`
+        var h = `<p>${url}<p/>`
         console.log('Word "' + SEARCH + '" found at page ' + url)
+        mailer(s, b, h).catch(console.error)
         callback()
       } else {
         console.log('Word ' + '"' + SEARCH + '"' + ' NOT found at page ' + url)
