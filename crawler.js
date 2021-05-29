@@ -1,10 +1,10 @@
 const request = require('request')
 const cheerio = require('cheerio')
 const URL = require('url-parse')
-const  mailer = require('./mailer.js')
+const mailer = require('./mailer.js')
 require('dotenv').config()
 
-const SEARCH = 'price error'
+const SEARCH = ['price error', 'pricing error', 'mizudashi']
 const BASE = 'https://www.ozbargain.com.au/'
 const START_URL = 'https://www.ozbargain.com.au/deals'
 const url = new URL(START_URL)
@@ -78,7 +78,7 @@ const visitPage = (url, callback) => {
         var s = `oz-crawler found at ${url}`
         var b = `Pricing error found. Follow the link at ${url}`
         var h = `<p>${url}<p/>`
-        console.log('Word "' + SEARCH + '" found at page ' + url)
+        console.log('Words "' + SEARCH + '" found at page ' + url)
         mailer(s, b, h).catch(console.error)
         callback()
       } else {
@@ -90,9 +90,13 @@ const visitPage = (url, callback) => {
 }
 
 //Search for word
-const searchForWord = ($, word) => {
-  var bodyText = $('html > body').text()
-  if (bodyText.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
+const searchForWord = ($, words) => {
+  var bodyText = $('.main').text()
+  console.log(bodyText)
+  var checker = words.some(
+    (word) => bodyText.toLowerCase().indexOf(word.toLowerCase()) !== -1
+  )
+  if (checker) {
     return true
   }
   return false
