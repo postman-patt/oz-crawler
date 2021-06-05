@@ -86,14 +86,17 @@ const visitPage = (url, callback) => {
         var b = `Pricing error found. Follow the link at ${url}`
         var h = `<p>${url}<p/>`
         console.log(
-          `Word "${SEARCH.join(', ')}" ${colors.green('NOT')} found at page` +
-            url
+          `Word "${SEARCH.join(', ')}" ${colors.bold.bgGreen.white(
+            ' FOUND '
+          )} at page ` + url
         )
         mailer(s, b, h).catch(console.error)
         callback()
       } else {
         console.log(
-          `Word "${SEARCH.join(', ')}" ${colors.red('NOT')} found at page` + url
+          `Word "${SEARCH.join(', ')}" ${colors.bold.bgRed.white(
+            ' NOT '
+          )} found at page ` + url
         )
         callback()
       }
