@@ -1,5 +1,5 @@
 
-Crawls Ozbargain Website looking for designaeted keywords. 
+Crawls Ozbargain Website looking for designated keywords (Eg. "Pricing Error", "Error", etc.)
 
 When found, emails user with link to the product. 
 
